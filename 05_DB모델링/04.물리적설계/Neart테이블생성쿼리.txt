@@ -1,0 +1,276 @@
+/* 회원 */
+CREATE TABLE member (
+	membernum NUMBER NOT NULL, /* 회원번호 */
+	id VARCHAR2(200) NOT NULL, /* 아이디 */
+	password VARCHAR2(200) NOT NULL, /* 패스워드 */
+	name VARCHAR2(200) NOT NULL, /* 이름 */
+	birthdate NUMBER, /* 생년월일 */
+	adress VARCHAR2(200), /* 주소 */
+	phonenum NUMBER NOT NULL /* 연락처 */
+);
+
+CREATE UNIQUE INDEX PK_member
+	ON member (
+		membernum ASC
+	);
+
+ALTER TABLE member
+	ADD
+		CONSTRAINT PK_member
+		PRIMARY KEY (
+			membernum
+		);
+
+/* 권한 */
+CREATE TABLE authorities (
+	authorityid NUMBER NOT NULL, /* 권한번호 */
+	membernum NUMBER /* 회원번호 */
+);
+
+CREATE UNIQUE INDEX PK_authorities
+	ON authorities (
+		authorityid ASC
+	);
+
+ALTER TABLE authorities
+	ADD
+		CONSTRAINT PK_authorities
+		PRIMARY KEY (
+			authorityid
+		);
+
+/* 게시판 */
+CREATE TABLE board (
+	bid NUMBER NOT NULL, /* 글번호 */
+	btitle VARCHAR2(200), /* 글제목 */
+	bcontent VARCHAR2(1800), /* 글내용 */
+	bdate DATE, /* 작성일 */
+	bhit NUMBER, /* 조회수 */
+	secret NUMBER, /* 비공개여부 */
+	bcategory NUMBER, /* 게시판구분 */
+	membernum NUMBER /* 회원번호 */
+);
+
+CREATE UNIQUE INDEX PK_board
+	ON board (
+		bid ASC
+	);
+
+ALTER TABLE board
+	ADD
+		CONSTRAINT PK_board
+		PRIMARY KEY (
+			bid
+		);
+
+/* 댓글 */
+CREATE TABLE reply (
+	bgroup NUMBER, /* 원본글그룹 */
+	bstep NUMBER, /* 가로 */
+	bindent NUMBER, /* 세로 */
+	bid NUMBER /* 글번호 */
+);
+
+/* 매출 */
+CREATE TABLE sales (
+	dailysales NUMBER, /* 일일매출 */
+	weeklysales NUMBER, /* 주간매출 */
+	monthlysales NUMBER /* 월간매출 */
+);
+
+/* 주문 */
+CREATE TABLE orders (
+	ordersid NUMBER NOT NULL, /* 주문번호 */
+	ordersdate DATE, /* 주문날짜 */
+	totalamount NUMBER, /* 총금액 */
+	membernum NUMBER, /* 회원번호 */
+	paymentid NUMBER, /* 결제번호 */
+	deliveryid NUMBER /* 배송번호 */
+);
+
+CREATE UNIQUE INDEX PK_orders
+	ON orders (
+		ordersid ASC
+	);
+
+ALTER TABLE orders
+	ADD
+		CONSTRAINT PK_orders
+		PRIMARY KEY (
+			ordersid
+		);
+
+/* 결제 */
+CREATE TABLE payment (
+	paymentid NUMBER NOT NULL /* 결제번호 */
+);
+
+CREATE UNIQUE INDEX PK_payment
+	ON payment (
+		paymentid ASC
+	);
+
+ALTER TABLE payment
+	ADD
+		CONSTRAINT PK_payment
+		PRIMARY KEY (
+			paymentid
+		);
+
+/* 배송 */
+CREATE TABLE delivery (
+	deliveryid NUMBER NOT NULL, /* 배송번호 */
+	delidate DATE, /* 배송일자 */
+	delistate VARCHAR2(100) /* 배송상태 */
+);
+
+CREATE UNIQUE INDEX PK_delivery
+	ON delivery (
+		deliveryid ASC
+	);
+
+ALTER TABLE delivery
+	ADD
+		CONSTRAINT PK_delivery
+		PRIMARY KEY (
+			deliveryid
+		);
+
+/* 주문상세 */
+CREATE TABLE ordersdetails (
+	detailsid NUMBER NOT NULL, /* 주문상세번호 */
+	totalquantity NUMBER, /* 총수량 */
+	productid NUMBER, /* 상품번호 */
+	ordersid NUMBER /* 주문번호 */
+);
+
+CREATE UNIQUE INDEX PK_ordersdetails
+	ON ordersdetails (
+		detailsid ASC
+	);
+
+ALTER TABLE ordersdetails
+	ADD
+		CONSTRAINT PK_ordersdetails
+		PRIMARY KEY (
+			detailsid
+		);
+
+/* 상품 */
+CREATE TABLE product (
+	productid NUMBER NOT NULL, /* 상품번호 */
+	productname VARCHAR2(300), /* 상품명 */
+	productcontent VARCHAR2(1800), /* 상품설명 */
+	illustrator VARCHAR2(300), /* 작가명 */
+	size VARCHAR2(200), /* 사이즈 */
+	quantity NUMBER, /* 수량 */
+	price NUMBER /* 금액 */
+);
+
+CREATE UNIQUE INDEX PK_product
+	ON product (
+		productid ASC
+	);
+
+ALTER TABLE product
+	ADD
+		CONSTRAINT PK_product
+		PRIMARY KEY (
+			productid
+		);
+
+/* 주문상세후기 */
+CREATE TABLE review (
+	reviewid NUMBER NOT NULL, /* 주문상세후기번호 */
+	detailsid NUMBER, /* 주문상세번호 */
+	bid NUMBER /* 글번호 */
+);
+
+CREATE UNIQUE INDEX PK_review
+	ON review (
+		reviewid ASC
+	);
+
+ALTER TABLE review
+	ADD
+		CONSTRAINT PK_review
+		PRIMARY KEY (
+			reviewid
+		);
+
+/* 이미지 */
+CREATE TABLE image (
+	imgid NUMBER NOT NULL, /* 파일번호 */
+	imgname VARCHAR2(200), /* 파일명 */
+	typeid NUMBER, /* 타입번호 */
+	reviewid NUMBER /* 주문상세후기번호 */
+);
+
+CREATE UNIQUE INDEX PK_image
+	ON image (
+		imgid ASC
+	);
+
+ALTER TABLE image
+	ADD
+		CONSTRAINT PK_image
+		PRIMARY KEY (
+			imgid
+		);
+
+/* 이미지카테고리 */
+CREATE TABLE imgcategory (
+	typeid NUMBER NOT NULL, /* 타입번호 */
+	imagetype VARCHAR2(200) /* 이미지구분 */
+);
+
+CREATE UNIQUE INDEX PK_imgcategory
+	ON imgcategory (
+		typeid ASC
+	);
+
+ALTER TABLE imgcategory
+	ADD
+		CONSTRAINT PK_imgcategory
+		PRIMARY KEY (
+			typeid
+		);
+
+/* 찜하기 */
+CREATE TABLE wishlist (
+	wishid NUMBER NOT NULL, /* 찜번호 */
+	membernum NUMBER, /* 회원번호 */
+	productid NUMBER /* 상품번호 */
+);
+
+CREATE UNIQUE INDEX PK_wishlist
+	ON wishlist (
+		wishid ASC
+	);
+
+ALTER TABLE wishlist
+	ADD
+		CONSTRAINT PK_wishlist
+		PRIMARY KEY (
+			wishid
+		);
+
+/* 장바구니 */
+CREATE TABLE cart (
+	cartid NUMBER NOT NULL, /* 장바구니번호 */
+	cartquantity NUMBER, /* 수량 */
+	membernum NUMBER, /* 회원번호 */
+	productid NUMBER /* 상품번호 */
+);
+
+CREATE UNIQUE INDEX PK_cart
+	ON cart (
+		cartid ASC
+	);
+
+ALTER TABLE cart
+	ADD
+		CONSTRAINT PK_cart
+		PRIMARY KEY (
+			cartid
+		);
